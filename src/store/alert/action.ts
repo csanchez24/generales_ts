@@ -10,3 +10,20 @@ export const success = (alert: Alert) => {
     });
   };
 };
+
+export const error = (alert: Alert) => {
+  return (dispatch: Dispatch): Action => {
+    return dispatch({
+      type: AlertActionTypes.ERROR,
+      payload: alert,
+    });
+  };
+};
+
+export const clear = () => {
+  return (dispatch: Dispatch): Action => {
+    return dispatch({
+      type: AlertActionTypes.CLEAR,
+    });
+  };
+};

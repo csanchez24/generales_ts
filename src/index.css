@@ -1,3 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-red-400 text-2xl;
+  }
+}
+
+@layer components {
+  .label-regular {
+    @apply block text-sm font-medium text-gray-700;
+  }
+
+  .label-error {
+    @apply text-red-600;
+  }
+
+  .input-regular {
+    @apply block w-full border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md;
+  }
+
+  .input-error {
+    @apply block w-full text-red-900 placeholder-red-300 border-red-300 shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md;
+  }
+
+  .button {
+    @apply flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .button-primary {
+    @apply bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500;
+  }
+  .button-disabled {
+    @apply opacity-75 cursor-not-allowed;
+  }
+}
+
+@layer utilities {
+}
