@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+
 import { Provider } from 'react-redux';
 
 import { BrowserRouter } from 'react-router-dom';
@@ -9,13 +12,20 @@ import reportWebVitals from './reportWebVitals';
 
 import { store } from './store';
 
+const client = new ApolloClient({
+  uri: 'http://localhost:3000/graphql',
+  cache: new InMemoryCache(),
+});
+
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

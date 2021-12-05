@@ -1,11 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link, Outlet, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import Alert from './components/Layout/Alert';
-import { Gener02 } from './pages/gener02/gener02';
-import { Gener05 } from './pages/gener05/gener05';
-import { Login } from './pages/login';
+import MainLayout from './components/Layout/MainLayout';
+import Gener02 from './pages/gener02/gener02';
+import Gener05 from './pages/gener05/gener05';
+import Login from './pages/login';
+import { clear } from './store/alert/action';
 import { alertState } from './store/alert/types';
 import { authState } from './store/authentication/types';
 
@@ -16,24 +18,28 @@ interface IGlobalState {
 
 const App: React.FC = () => {
   const alert = useSelector((state: IGlobalState) => state.alert.data);
+  const dispatch = useDispatch();
   return (
     <main>
       {alert?.message && (
-        <Alert type={alert.type} title="success" message={alert.message} close={() => {}} />
-      )}{' '}
+        <Alert
+          type={alert.type}
+          title="success"
+          message={alert.message}
+          close={() => dispatch(clear())}
+        />
+      )}
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<App />}>
-          <Route path="gener02" element={<Gener02 />}>
-            <Route
-              index
-              element={
-                <main style={{ padding: '1rem' }}>
-                  <p>Select an invoice</p>
-                </main>
-              }
-            />
-          </Route>
+        <Route path="/" element={<MainLayout />}>
+          <Route
+            path="gener02"
+            element={
+              <RequireAuth>
+                <Gener02 />
+              </RequireAuth>
+            }
+          />
           <Route path="gener05" element={<Gener05 />} />
           <Route
             path="*"
@@ -45,11 +51,17 @@ const App: React.FC = () => {
           />
         </Route>
       </Routes>
-      <h1>Bookkeeper!</h1>
-      <Link to="/gener02">Gener02</Link> | <Link to="/gener05">Gener05</Link>
-      <Outlet />
     </main>
   );
 };
+
+function RequireAuth({ children }: { children: JSX.Element }) {
+  const auth = useSelector((state: IGlobalState) => state.auth.data);
+  let location = useLocation();
+  if (!auth.loggedIn) {
+    return <Navigate to="/login" state={{ from: location }} />;
+  }
+  return children;
+}
 
 export default App;

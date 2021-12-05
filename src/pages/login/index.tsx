@@ -5,11 +5,26 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Input from './../../components/UI/Input';
 import Button from './../../components/UI/Button';
-import { Auth } from '../../store/authentication/types';
+import { Auth, IresponseToken } from '../../store/authentication/types';
 import { login } from '../../store/authentication/action';
+import { useLoginLazyQuery } from '../../generated/graphql';
+import jwt_decode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
-export const Login: React.FC = () => {
+const Login: React.FC = () => {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
+
+  const [loginQuery] = useLoginLazyQuery({
+    onCompleted({ login: loginData }) {
+      if (loginData && loginData.token) {
+        localStorage.setItem('token', loginData.token);
+        const { user } = jwt_decode(loginData.token) as IresponseToken;
+        dispatch(login(user));
+        navigate('/');
+      }
+    },
+  });
 
   const signInSchema = Yup.object().shape({
     email: Yup.string().email().required('Required'),
@@ -19,8 +34,11 @@ export const Login: React.FC = () => {
     email: '',
     password: '',
   };
-  const submitForm = async (values: Auth) => {
-    dispatch(login(values));
+  const SubmitForm = async (auth: Auth) => {
+    const { email, password } = auth;
+    loginQuery({
+      variables: { loginInput: { email: email, password: password } },
+    });
   };
 
   return (
@@ -41,7 +59,7 @@ export const Login: React.FC = () => {
               <Formik
                 initialValues={initialValues}
                 validationSchema={signInSchema}
-                onSubmit={submitForm}
+                onSubmit={SubmitForm}
               >
                 {(formik) => {
                   const {
@@ -105,3 +123,5 @@ export const Login: React.FC = () => {
     </div>
   );
 };
+
+export default Login;

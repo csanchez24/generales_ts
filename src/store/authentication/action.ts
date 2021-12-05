@@ -1,28 +1,20 @@
-import { Auth, AuthActionTypes } from './types';
-
+import { AuthActionTypes } from './types';
 import { Action, Dispatch } from 'redux';
-import { AlertActionTypes } from '../alert/types';
 
-export const login = (auth: Auth) => {
+export const login = (auth: any) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch({
-      type: AuthActionTypes.REQUEST,
+      type: AuthActionTypes.SUCCESS,
+      payload: auth,
     });
-    try {
-      //make call to api
-      dispatch({
-        type: AuthActionTypes.SUCCESS,
-        payload: auth,
-      });
-    } catch (error) {
-      dispatch({
-        type: AuthActionTypes.FAIL,
-        payload: error,
-      });
-      dispatch({
-        type: AlertActionTypes.ERROR,
-        payload: error,
-      });
-    }
+  };
+};
+
+export const logout = () => {
+  return (dispatch: Dispatch): Action => {
+    localStorage.removeItem('token');
+    return dispatch({
+      type: AuthActionTypes.LOGOUT,
+    });
   };
 };

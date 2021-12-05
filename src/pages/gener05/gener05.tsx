@@ -1,5 +1,8 @@
 import React from 'react';
 
-export const Gener05 = () => {
+const Gener05: React.FC = () => {
   return <div>Gener05</div>;
 };
+
+
+export default Gener05;

@@ -1,6 +1,13 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAllGener02Query } from '../../generated/graphql';
 
-export const Gener02 = () => {
+const Gener02: React.FC = () => {
+
+  const { data, error, loading } = useAllGener02Query();
+
+console.log(data,error,loading);
+
   return (
     <div>
       Gener02
@@ -8,3 +15,4 @@ export const Gener02 = () => {
     </div>
   );
 };
+export default Gener02;

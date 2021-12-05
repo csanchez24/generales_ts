@@ -3,15 +3,24 @@ export interface Auth {
   password: string;
 }
 
-interface User {
-  email: string;
+export interface User {
+  id: number;
   name: string;
+  email: string;
+  roles: [string];
+}
+
+export interface IresponseToken {
+  user: User;
+  iat: string;
+  exp: string;
 }
 
 export enum AuthActionTypes {
   REQUEST = '@@autentication/REQUEST',
   SUCCESS = '@@autentication/SUCCESS',
   FAIL = '@@autentication/FAIL',
+  LOGOUT = '@@autentication/LOGOUT',
 }
 
 interface IAuth {
@@ -21,5 +30,4 @@ interface IAuth {
 
 export interface authState {
   readonly data: IAuth;
-  readonly loading: boolean;
 }
