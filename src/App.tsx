@@ -8,13 +8,7 @@ import Gener02 from './pages/gener02/gener02';
 import Gener05 from './pages/gener05/gener05';
 import Login from './pages/login';
 import { clear } from './store/alert/action';
-import { alertState } from './store/alert/types';
-import { authState } from './store/authentication/types';
-
-interface IGlobalState {
-  alert: alertState;
-  auth: authState;
-}
+import { IGlobalState } from './store/reducers';
 
 const App: React.FC = () => {
   const alert = useSelector((state: IGlobalState) => state.alert.data);

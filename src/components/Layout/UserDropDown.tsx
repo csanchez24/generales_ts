@@ -2,6 +2,8 @@ import React from 'react';
 import { Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { NavLink } from 'react-router-dom';
+import { IGlobalState } from '../../store/reducers';
+import { useSelector } from 'react-redux';
 
 interface IProps {
   isOpen: boolean;
@@ -10,6 +12,8 @@ interface IProps {
 }
 
 const UserDropDown: React.FC<IProps> = (props) => {
+  const auth = useSelector((state: IGlobalState) => state.auth.data.user);
+
   return (
     <div className="relative ml-3">
       <div>
@@ -25,7 +29,7 @@ const UserDropDown: React.FC<IProps> = (props) => {
             alt=""
           />
           <span className="hidden ml-3 text-sm font-medium text-gray-700 lg:block">
-            Emilia Birch
+            {auth?.name}
           </span>
           <ChevronDownIcon className="flex-shrink-0 hidden w-4 h-4 ml-1 text-gray-400 lg:block" />
         </button>
